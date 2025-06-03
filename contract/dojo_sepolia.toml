@@ -1,0 +1,15 @@
+[world]
+name = "Full-Starter-React"
+description = "Full Starter React is a template project to be used for other devs to quickly learn how to use the controller, achievements, backend and its integration. Built using Dojo Engine and Cartridge Controller on Starknet."
+seed = "full_starter_react"
+
+[namespace]
+default = "full_starter_react"
+
+[env]
+rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
+
+[writers]
+"full_starter_react" = ["full_starter_react-game"]
+"full_starter_react-TrophyCreation" = ["full_starter_react-game"]
+"full_starter_react-TrophyProgression" = ["full_starter_react-game"]
