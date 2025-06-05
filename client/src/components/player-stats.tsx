@@ -2,10 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Progress } from "./ui/progress"
 import { useAccount } from "@starknet-react/core"
 import useAppStore from "../zustand/store"
-import { Coins, Trophy, Zap, Heart } from "lucide-react"
+import { Trophy, Zap, Heart, Loader2 } from "lucide-react"
 
 export function PlayerStats() {
-  const { address, status } = useAccount();
+  const { status } = useAccount();
   const player = useAppStore(state => state.player);
   const isLoading = useAppStore(state => state.isLoading);
   
@@ -23,6 +23,24 @@ export function PlayerStats() {
   const expInCurrentLevel = (player?.experience || 0) % 100;
   const expNeededForNextLevel = 100;
 
+  if (isLoading) {
+    return (
+      <Card className="bg-white/5 backdrop-blur-xl border-white/10">
+        <CardHeader>
+          <CardTitle className="text-red-400 text-xl font-bold">Player Stats</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex items-center justify-center py-8">
+            <div className="flex items-center gap-3 text-slate-300">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Loading player data...</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="bg-white/5 backdrop-blur-xl border-white/10">
       <CardHeader>
@@ -34,7 +52,7 @@ export function PlayerStats() {
           <div key={stat.label} className="flex justify-between items-center">
             <span className="text-slate-300">{stat.label}</span>
             <span className={`font-bold text-lg ${stat.color}`}>
-              {isLoading ? "..." : stat.value}
+              {stat.value}
             </span>
           </div>
         ))}
@@ -63,11 +81,11 @@ export function PlayerStats() {
           </div>
         )}
 
-        {isConnected && !player && !isLoading && (
+        {isConnected && !player && (
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
             <div className="flex items-center gap-2 text-blue-400 text-sm">
               <Zap className="w-4 h-4" />
-              <span>No player found. Spawn a new player to start!</span>
+              <span>Creating your player automatically...</span>
             </div>
           </div>
         )}
