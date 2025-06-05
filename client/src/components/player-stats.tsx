@@ -1,27 +1,27 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Progress } from "./ui/progress"
 import { useAccount } from "@starknet-react/core"
+import useAppStore from "../zustand/store"
 import { Coins, Trophy, Zap, Heart } from "lucide-react"
 
 export function PlayerStats() {
   const { address, status } = useAccount();
+  const player = useAppStore(state => state.player);
+  const isLoading = useAppStore(state => state.isLoading);
   
-  // Mock data para el starter - después vendrá de hooks reales como usePlayer
-  const mockState = {
-    level: 1,
-    experience: 0,
-    maxExp: 100,
-    health: 100,
-    coins: 0
-  };
-
   const isConnected = status === "connected";
 
+  // Usar datos reales del player o valores por defecto
   const stats = [
-    { label: "Level", value: mockState.level, color: "text-red-400" },
-    { label: "Health", value: mockState.health, color: "text-green-400" },
-    { label: "Coins", value: mockState.coins, color: "text-yellow-400" },
+    { label: "Experience", value: player?.experience || 0, color: "text-blue-400" },
+    { label: "Health", value: player?.health || 100, color: "text-green-400" },
+    { label: "Coins", value: player?.coins || 0, color: "text-yellow-400" },
   ];
+
+  // Calcular experiencia para level up (ejemplo: cada 100 exp = 1 level)
+  const currentLevel = Math.floor((player?.experience || 0) / 100) + 1;
+  const expInCurrentLevel = (player?.experience || 0) % 100;
+  const expNeededForNextLevel = 100;
 
   return (
     <Card className="bg-white/5 backdrop-blur-xl border-white/10">
@@ -29,25 +29,33 @@ export function PlayerStats() {
         <CardTitle className="text-red-400 text-xl font-bold">Player Stats</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Stats principales */}
         {stats.map((stat) => (
           <div key={stat.label} className="flex justify-between items-center">
             <span className="text-slate-300">{stat.label}</span>
-            <span className={`font-bold text-lg ${stat.color}`}>{stat.value}</span>
+            <span className={`font-bold text-lg ${stat.color}`}>
+              {isLoading ? "..." : stat.value}
+            </span>
           </div>
         ))}
 
+        {/* Barra de experiencia */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-slate-300">Experience</span>
+            <span className="text-slate-300">Level {currentLevel}</span>
             <span className="text-blue-400 font-bold">
-              {mockState.experience} / {mockState.maxExp}
+              {expInCurrentLevel} / {expNeededForNextLevel}
             </span>
           </div>
-          <Progress value={(mockState.experience / mockState.maxExp) * 100} className="h-2 bg-slate-700" />
+          <Progress 
+            value={(expInCurrentLevel / expNeededForNextLevel) * 100} 
+            className="h-2 bg-slate-700" 
+          />
         </div>
 
+        {/* Estados de conexión */}
         {!isConnected && (
-          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mt-4">
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
             <div className="flex items-center gap-2 text-yellow-400 text-sm">
               <Trophy className="w-4 h-4" />
               <span>Connect wallet to load real player stats</span>
@@ -55,11 +63,20 @@ export function PlayerStats() {
           </div>
         )}
 
-        {isConnected && (
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mt-4">
+        {isConnected && !player && !isLoading && (
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
             <div className="flex items-center gap-2 text-blue-400 text-sm">
               <Zap className="w-4 h-4" />
-              <span>Wallet connected! Stats will update after spawning player.</span>
+              <span>No player found. Spawn a new player to start!</span>
+            </div>
+          </div>
+        )}
+
+        {isConnected && player && (
+          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+            <div className="flex items-center gap-2 text-green-400 text-sm">
+              <Heart className="w-4 h-4" />
+              <span>Player loaded! Ready to play.</span>
             </div>
           </div>
         )}
