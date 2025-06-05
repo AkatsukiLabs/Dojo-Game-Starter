@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// Interface que coincide con tus bindings
+// Interface matching your bindings
 export interface Player {
   owner: string;          
   experience: number;
@@ -10,7 +10,7 @@ export interface Player {
   creation_day: number;
 }
 
-// Estado de la aplicación
+// Application state
 interface AppState {
   // Player data
   player: Player | null;
@@ -23,7 +23,7 @@ interface AppState {
   gameStarted: boolean;
 }
 
-// Acciones del store
+// Store actions
 interface AppActions {
   // Player actions
   setPlayer: (player: Player | null) => void;
@@ -43,10 +43,10 @@ interface AppActions {
   resetStore: () => void;
 }
 
-// Combinar estado y acciones
+// Combine state and actions
 type AppStore = AppState & AppActions;
 
-// Estado inicial
+// Initial state
 const initialState: AppState = {
   player: null,
   isLoading: false,
@@ -54,11 +54,11 @@ const initialState: AppState = {
   gameStarted: false,
 };
 
-// Crear el store
+// Create the store
 const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
-      // Estado inicial
+      // Initial state
       ...initialState,
 
       // Player actions

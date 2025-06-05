@@ -1,4 +1,3 @@
-// components/status-bar.tsx
 import { Button } from "./ui/button"
 import { useStarknetConnect } from "../dojo/hooks/useStarknetConnect"
 import { useSpawnPlayer } from "../dojo/hooks/useSpawnPlayer"
@@ -7,31 +6,30 @@ import { Loader2, Wallet, CheckCircle, LogOut, UserPlus } from "lucide-react"
 import { useEffect } from "react"
 
 export function StatusBar() {
-  const { 
-    status, 
-    address, 
-    isConnecting, 
-    handleConnect, 
-    handleDisconnect 
+  const {
+    status,
+    address,
+    isConnecting,
+    handleConnect,
+    handleDisconnect
   } = useStarknetConnect();
 
   const { player, isLoading: playerLoading } = usePlayer();
-  const { 
-    initializePlayer, 
-    isInitializing, 
-    completed, 
+  const {
+    initializePlayer,
+    isInitializing,
     txStatus,
-    txHash 
+    txHash
   } = useSpawnPlayer();
 
   const isConnected = status === "connected";
   const isLoading = isConnecting || status === "connecting" || isInitializing || playerLoading;
 
-  // 🎮 Auto-inicializar player después de conectar wallet
+  // 🎮 Auto-initialize player after connecting wallet
   useEffect(() => {
     if (isConnected && !player && !isInitializing && !playerLoading) {
       console.log("🎮 Wallet connected but no player found, auto-initializing...");
-      // Pequeño delay para que se vea natural
+      // Small delay to make it feel natural
       setTimeout(() => {
         initializePlayer().then(result => {
           console.log("🎮 Auto-initialization result:", result);
@@ -91,11 +89,10 @@ export function StatusBar() {
           ) : (
             <div className="flex items-center gap-3">
               <Button
-                className={`px-6 py-3 font-semibold transition-all duration-300 shadow-lg cursor-default ${
-                  player 
-                    ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-green-500/30"
-                    : "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 shadow-yellow-500/30"
-                }`}
+                className={`px-6 py-3 font-semibold transition-all duration-300 shadow-lg cursor-default ${player
+                  ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-green-500/30"
+                  : "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 shadow-yellow-500/30"
+                  }`}
                 disabled
               >
                 {isInitializing ? (
@@ -120,7 +117,7 @@ export function StatusBar() {
                   </>
                 )}
               </Button>
-              
+
               <Button
                 onClick={handleDisconnect}
                 variant="outline"
@@ -131,7 +128,7 @@ export function StatusBar() {
               </Button>
             </div>
           )}
-          
+
           {address && (
             <span className="text-slate-300 font-mono text-sm bg-slate-800/50 px-3 py-1 rounded-lg">
               {formatAddress(address)}
@@ -157,9 +154,9 @@ export function StatusBar() {
         <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
           <div className="text-blue-400 text-sm">
             <span className="font-semibold">Player Creation Tx: </span>
-            <a 
+            <a
               href={`https://sepolia.starkscan.co/tx/${txHash}`}
-              target="_blank" 
+              target="_blank"
               rel="noopener noreferrer"
               className="underline hover:text-blue-300"
             >

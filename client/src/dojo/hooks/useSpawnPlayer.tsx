@@ -1,4 +1,3 @@
-// src/hooks/useSpawnPlayer.ts
 import { useState, useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useAccount } from "@starknet-react/core";
@@ -33,7 +32,7 @@ export const useSpawnPlayer = () => {
   const { player, isLoading: playerLoading, refetch: refetchPlayer } = usePlayer();
   const { setLoading } = useAppStore();
 
-  // Estado local
+  // Local state
   const [initState, setInitState] = useState<InitializeState>({
     isInitializing: false,
     error: null,
@@ -42,22 +41,22 @@ export const useSpawnPlayer = () => {
     txHash: null,
     txStatus: null
   });
-  
-  // Tracking si estamos inicializando
+
+  // Tracking if we are initializing
   const [isInitializing, setIsInitializing] = useState(false);
-  
+
   /**
-   * Verifica si el player existe e inicializa según corresponda
+   * Checks if the player exists and initializes as needed
    */
   const initializePlayer = useCallback(async (): Promise<InitializeResponse> => {
-    // Prevenir ejecuciones múltiples
+    // Prevent multiple executions
     if (isInitializing) {
       return { success: false, playerExists: false, error: "Already initializing" };
     }
-    
+
     setIsInitializing(true);
-    
-    // Validación: Verificar que la wallet esté conectada
+
+    // Validation: Check that the wallet is connected
     if (status !== "connected") {
       const error = "Wallet not connected. Please connect your wallet first.";
       setInitState(prev => ({ ...prev, error }));
@@ -65,7 +64,7 @@ export const useSpawnPlayer = () => {
       return { success: false, playerExists: false, error };
     }
 
-    // Validación: Verificar que la cuenta exista
+    // Validation: Check that the account exists
     if (!account) {
       const error = "No account found. Please connect your wallet.";
       setInitState(prev => ({ ...prev, error }));
@@ -76,119 +75,119 @@ export const useSpawnPlayer = () => {
     const transactionId = uuidv4();
 
     try {
-      // Iniciar proceso de inicialización
-      setInitState(prev => ({ 
-        ...prev, 
-        isInitializing: true, 
+      // Start initialization process
+      setInitState(prev => ({
+        ...prev,
+        isInitializing: true,
         error: null,
         step: 'checking'
       }));
 
       console.log("🎮 Starting player initialization...");
-      
-      // Refetch datos del player
+
+      // Refetch player data
       console.log("🔄 Fetching latest player data...");
       await refetchPlayer();
-      
-      // Esperar un poco para asegurar que los datos se carguen
+
+      // Wait a bit to ensure data is loaded
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Verificación directa desde el store
+
+      // Direct check from the store
       const storePlayer = useAppStore.getState().player;
-      
-      // Verificación simple si el player existe en el store
+
+      // Simple check if the player exists in the store
       const playerExists = storePlayer !== null;
-      
-      console.log("🎮 Final player check:", { 
-        playerExists, 
+
+      console.log("🎮 Final player check:", {
+        playerExists,
         playerInStore: !!storePlayer,
         accountAddress: account.address
       });
 
       if (playerExists) {
-        // Player existe - cargar datos y continuar
+        // Player exists - load data and continue
         console.log("✅ Player already exists, continuing with existing data...");
-        
-        setInitState(prev => ({ 
-          ...prev, 
+
+        setInitState(prev => ({
+          ...prev,
           step: 'loading'
         }));
-        
-        // Pequeño delay para mostrar estado de carga
+
+        // Small delay to show loading state
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        setInitState(prev => ({ 
-          ...prev, 
+
+        setInitState(prev => ({
+          ...prev,
           completed: true,
           isInitializing: false,
           step: 'success'
         }));
-        
+
         setIsInitializing(false);
-        return { 
-          success: true, 
-          playerExists: true 
+        return {
+          success: true,
+          playerExists: true
         };
 
       } else {
-        // Player no existe - crear nuevo player
+        // Player does not exist - create new player
         console.log("🆕 Player does not exist, spawning new player...");
-        
-        setInitState(prev => ({ 
-          ...prev, 
+
+        setInitState(prev => ({
+          ...prev,
           step: 'spawning',
           txStatus: 'PENDING'
         }));
 
-        // Ejecutar transacción de spawn
+        // Execute spawn transaction
         console.log("📤 Executing spawn transaction...");
         const spawnTx = await client.game.spawnPlayer(account as Account);
-        
+
         console.log("📥 Spawn transaction response:", spawnTx);
-        
+
         if (spawnTx?.transaction_hash) {
-          setInitState(prev => ({ 
-            ...prev, 
+          setInitState(prev => ({
+            ...prev,
             txHash: spawnTx.transaction_hash
           }));
         }
-        
+
         if (spawnTx && spawnTx.code === "SUCCESS") {
           console.log("🎉 Player spawned successfully!");
-          
-          setInitState(prev => ({ 
-            ...prev, 
+
+          setInitState(prev => ({
+            ...prev,
             txStatus: 'SUCCESS'
           }));
-          
-          // Esperar a que se procese la transacción
+
+          // Wait for the transaction to be processed
           console.log("⏳ Waiting for transaction to be processed...");
           await new Promise(resolve => setTimeout(resolve, 3500));
-          
-          // Refetch datos del player
+
+          // Refetch player data
           console.log("🔄 Refetching player data after spawn...");
           await refetchPlayer();
-          
-          setInitState(prev => ({ 
-            ...prev, 
+
+          setInitState(prev => ({
+            ...prev,
             completed: true,
             isInitializing: false,
             step: 'success'
           }));
-          
-          // Confirmar transacción en el store de Dojo
+
+          // Confirm transaction in the Dojo store
           dojoState.confirmTransaction(transactionId);
-          
+
           setIsInitializing(false);
-          return { 
-            success: true, 
+          return {
+            success: true,
             playerExists: false,
-            transactionHash: spawnTx.transaction_hash 
+            transactionHash: spawnTx.transaction_hash
           };
         } else {
-          // Actualizar estado de transacción a rechazada
-          setInitState(prev => ({ 
-            ...prev, 
+          // Update transaction state to rejected
+          setInitState(prev => ({
+            ...prev,
             txStatus: 'REJECTED'
           }));
           throw new Error("Spawn transaction failed with code: " + spawnTx?.code);
@@ -196,37 +195,37 @@ export const useSpawnPlayer = () => {
       }
 
     } catch (error) {
-      const errorMessage = error instanceof Error 
-        ? error.message 
+      const errorMessage = error instanceof Error
+        ? error.message
         : "Failed to initialize player. Please try again.";
-      
+
       console.error("❌ Error initializing player:", error);
-      
-      // Revertir actualización optimista si aplica
+
+      // Revert optimistic update if applicable
       dojoState.revertOptimisticUpdate(transactionId);
-      
-      // Actualizar estado de transacción a rechazada si hubo transacción
+
+      // Update transaction state to rejected if there was a transaction
       if (initState.txHash) {
-        setInitState(prev => ({ 
-          ...prev, 
+        setInitState(prev => ({
+          ...prev,
           txStatus: 'REJECTED'
         }));
       }
-      
-      setInitState(prev => ({ 
-        ...prev, 
+
+      setInitState(prev => ({
+        ...prev,
         error: errorMessage,
         isInitializing: false,
         step: 'checking'
       }));
-      
+
       setIsInitializing(false);
       return { success: false, playerExists: false, error: errorMessage };
     }
-  }, [status, account, refetchPlayer, player, isInitializing, client.game, dojoState]); 
+  }, [status, account, refetchPlayer, player, isInitializing, client.game, dojoState]);
 
   /**
-   * Reset del estado de inicialización
+   * Reset the initialization state
    */
   const resetInitializer = useCallback(() => {
     console.log("🔄 Resetting initializer state...");
@@ -241,13 +240,13 @@ export const useSpawnPlayer = () => {
     });
   }, []);
 
-  // Sincronizar estado de carga con el store
+  // Sync loading state with the store
   useEffect(() => {
     setLoading(initState.isInitializing || playerLoading);
   }, [initState.isInitializing, playerLoading, setLoading]);
 
   return {
-    // Estado
+    // State
     isInitializing: initState.isInitializing,
     error: initState.error,
     completed: initState.completed,
@@ -256,8 +255,8 @@ export const useSpawnPlayer = () => {
     txStatus: initState.txStatus,
     isConnected: status === "connected",
     playerExists: useAppStore.getState().player !== null,
-    
-    // Acciones
+
+    // Actions
     initializePlayer,
     resetInitializer
   };

@@ -11,14 +11,14 @@ export function PlayerStats() {
   
   const isConnected = status === "connected";
 
-  // Usar datos reales del player o valores por defecto
+  // Use real player data or default values
   const stats = [
     { label: "Experience", value: player?.experience || 0, color: "text-blue-400" },
     { label: "Health", value: player?.health || 100, color: "text-green-400" },
     { label: "Coins", value: player?.coins || 0, color: "text-yellow-400" },
   ];
 
-  // Calcular experiencia para level up (ejemplo: cada 100 exp = 1 level)
+  // Calculate experience for level up (example: every 100 exp = 1 level)
   const currentLevel = Math.floor((player?.experience || 0) / 100) + 1;
   const expInCurrentLevel = (player?.experience || 0) % 100;
   const expNeededForNextLevel = 100;
@@ -47,7 +47,7 @@ export function PlayerStats() {
         <CardTitle className="text-red-400 text-xl font-bold">Player Stats</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Stats principales */}
+        {/* Main stats */}
         {stats.map((stat) => (
           <div key={stat.label} className="flex justify-between items-center">
             <span className="text-slate-300">{stat.label}</span>
@@ -57,7 +57,7 @@ export function PlayerStats() {
           </div>
         ))}
 
-        {/* Barra de experiencia */}
+        {/* Experience bar */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <span className="text-slate-300">Level {currentLevel}</span>
@@ -71,7 +71,7 @@ export function PlayerStats() {
           />
         </div>
 
-        {/* Estados de conexión */}
+        {/* Connection states */}
         {!isConnected && (
           <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
             <div className="flex items-center gap-2 text-yellow-400 text-sm">
