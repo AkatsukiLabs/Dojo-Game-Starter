@@ -1,7 +1,7 @@
 [world]
 name = "Full-Starter-React"
 description = "Full Starter React is a template project to be used for other devs to quickly learn how to use the controller, achievements, backend and its integration. Built using Dojo Engine and Cartridge Controller on Starknet."
-seed = "full_starter_react"
+seed = "full_starter_react1"
 
 [namespace]
 default = "full_starter_react"
