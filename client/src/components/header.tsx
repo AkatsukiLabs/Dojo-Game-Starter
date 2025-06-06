@@ -34,7 +34,15 @@ export function Header() {
         </div>
       </div>
 
-      <h1 className="text-3xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-red-500 via-white to-blue-600 bg-clip-text text-transparent">
+      <h1
+        className="
+          text-3xl md:text-5xl 
+          font-bold mb-2 py-2
+          bg-gradient-to-r from-red-500 via-white to-blue-600 
+          bg-clip-text text-transparent 
+          leading-normal
+        "
+      >
         Dojo Game Starter
       </h1>
       <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto px-4">
