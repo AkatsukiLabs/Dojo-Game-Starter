@@ -38,7 +38,7 @@ export const useMineAction = (): UseMineActionReturn => {
   const executeMine = useCallback(async () => {
     if (!canMine || !account) {
       const errorMsg = !account
-        ? "Please connect your wallet"
+        ? "Please connect your controller"
         : !hasEnoughHealth
           ? "Not enough health to mine (need >5 HP)"
           : "Cannot mine right now";

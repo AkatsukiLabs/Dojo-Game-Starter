@@ -19,9 +19,9 @@ export function useStarknetConnect() {
     try {
       setIsConnecting(true);
       setHasTriedConnect(true);
-      console.log("🔗 Attempting to connect wallet...");
+      console.log("🔗 Attempting to connect controller...");
       await connect({ connector });
-      console.log("✅ Wallet connected successfully");
+      console.log("✅ controller connected successfully");
     } catch (error) {
       console.error("❌ Connection failed:", error);
     } finally {
@@ -31,10 +31,10 @@ export function useStarknetConnect() {
 
   const handleDisconnect = useCallback(async () => {
     try {
-      console.log("🔌 Disconnecting wallet...");
+      console.log("🔌 Disconnecting controller...");
       await disconnect();
       setHasTriedConnect(false);
-      console.log("✅ Wallet disconnected successfully");
+      console.log("✅ controller disconnected successfully");
     } catch (error) {
       console.error("❌ Disconnection failed:", error);
     }

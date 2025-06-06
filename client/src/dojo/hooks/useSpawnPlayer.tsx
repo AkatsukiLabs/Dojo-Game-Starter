@@ -56,9 +56,9 @@ export const useSpawnPlayer = () => {
 
     setIsInitializing(true);
 
-    // Validation: Check that the wallet is connected
+    // Validation: Check that the controller is connected
     if (status !== "connected") {
-      const error = "Wallet not connected. Please connect your wallet first.";
+      const error = "Controller not connected. Please connect your controller first.";
       setInitState(prev => ({ ...prev, error }));
       setIsInitializing(false);
       return { success: false, playerExists: false, error };
@@ -66,7 +66,7 @@ export const useSpawnPlayer = () => {
 
     // Validation: Check that the account exists
     if (!account) {
-      const error = "No account found. Please connect your wallet.";
+      const error = "No account found. Please connect your controller.";
       setInitState(prev => ({ ...prev, error }));
       setIsInitializing(false);
       return { success: false, playerExists: false, error };

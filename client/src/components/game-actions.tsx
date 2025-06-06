@@ -68,7 +68,7 @@ export function GameActions() {
         {!player && (
           <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
             <div className="text-yellow-400 text-sm text-center">
-              🎮 Connect wallet and create player to unlock actions
+              🎮 Connect controller and create player to unlock actions
             </div>
           </div>
         )}

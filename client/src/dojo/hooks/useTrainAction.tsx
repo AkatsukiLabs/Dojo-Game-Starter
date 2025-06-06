@@ -38,7 +38,7 @@ export const useTrainAction = (): UseTrainActionReturn => {
     if (!canTrain || !account) {
       setTrainState(prev => ({
         ...prev,
-        error: !account ? "Please connect your wallet" : "Cannot train right now"
+        error: !account ? "Please connect your controller" : "Cannot train right now"
       }));
       return;
     }

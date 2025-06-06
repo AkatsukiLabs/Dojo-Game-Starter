@@ -38,7 +38,7 @@ export const useRestAction = (): UseRestActionReturn => {
   const executeRest = useCallback(async () => {
     if (!canRest || !account) {
       const errorMsg = !account
-        ? "Please connect your wallet"
+        ? "Please connect your controller"
         : !needsHealth
           ? "Health is already full"
           : "Cannot rest right now";

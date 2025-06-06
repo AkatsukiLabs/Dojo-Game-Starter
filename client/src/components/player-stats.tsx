@@ -132,7 +132,7 @@ export function PlayerStats() {
           <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
             <div className="flex items-center gap-2 text-yellow-400 text-sm">
               <Coins className="w-4 h-4" />
-              <span>Connect wallet to load real player stats</span>
+              <span>Connect controller to load real player stats</span>
             </div>
           </div>
         )}

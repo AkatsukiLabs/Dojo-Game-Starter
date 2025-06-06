@@ -29,10 +29,10 @@ export function StatusBar() {
   const isConnected = status === "connected";
   const isLoading = isConnecting || status === "connecting" || isInitializing || playerLoading;
 
-  // 🎮 Auto-initialize player after connecting wallet
+  // 🎮 Auto-initialize player after connecting controller
   useEffect(() => {
     if (isConnected && !player && !isInitializing && !playerLoading) {
-      console.log("🎮 Wallet connected but no player found, auto-initializing...");
+      console.log("🎮 Controller connected but no player found, auto-initializing...");
       setTimeout(() => {
         initializePlayer().then(result => {
           console.log("🎮 Auto-initialization result:", result);
@@ -47,7 +47,7 @@ export function StatusBar() {
   };
 
   const getStatusMessage = () => {
-    if (!isConnected) return "Connect your wallet to start playing";
+    if (!isConnected) return "Connect your controller to start playing";
     if (playerLoading) return "Loading player data...";
     if (isInitializing) {
       if (txStatus === 'PENDING') return "Creating player on blockchain...";
@@ -98,7 +98,7 @@ export function StatusBar() {
               ) : (
                 <>
                   <Wallet className="w-4 h-4 mr-2" />
-                  Connect Wallet
+                  Connect Controller
                 </>
               )}
             </Button>
