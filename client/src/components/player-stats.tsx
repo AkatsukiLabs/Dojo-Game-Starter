@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Progress } from "./ui/progress"
 import { useAccount } from "@starknet-react/core"
 import useAppStore from "../zustand/store"
-import { Trophy, Zap, Heart, Loader2, AlertTriangle } from "lucide-react"
+import { Coins, Zap, Heart, Loader2, AlertTriangle } from "lucide-react"
 
 export function PlayerStats() {
   const { status } = useAccount();
@@ -30,7 +30,7 @@ export function PlayerStats() {
       label: "Coins",
       value: player?.coins || 0,
       color: "text-yellow-400",
-      icon: Trophy
+      icon: Coins
     },
   ];
 
@@ -51,7 +51,7 @@ export function PlayerStats() {
     return (
       <Card className="bg-white/5 backdrop-blur-xl border-white/10">
         <CardHeader>
-          <CardTitle className="text-red-400 text-xl font-bold">Player Stats</CardTitle>
+          <CardTitle className="text-white text-xl font-bold">Player Stats</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-center py-8">
@@ -68,7 +68,7 @@ export function PlayerStats() {
   return (
     <Card className="bg-white/5 backdrop-blur-xl border-white/10">
       <CardHeader>
-        <CardTitle className="text-red-400 text-xl font-bold">Player Stats</CardTitle>
+        <CardTitle className="text-white text-xl font-bold">Player Stats</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Main stats */}
@@ -131,7 +131,7 @@ export function PlayerStats() {
         {!isConnected && (
           <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
             <div className="flex items-center gap-2 text-yellow-400 text-sm">
-              <Trophy className="w-4 h-4" />
+              <Coins className="w-4 h-4" />
               <span>Connect wallet to load real player stats</span>
             </div>
           </div>

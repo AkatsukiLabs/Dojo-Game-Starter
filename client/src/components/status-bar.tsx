@@ -1,9 +1,10 @@
-import { Button } from "./ui/button"
-import { useStarknetConnect } from "../dojo/hooks/useStarknetConnect"
-import { useSpawnPlayer } from "../dojo/hooks/useSpawnPlayer"
-import { usePlayer } from "../dojo/hooks/usePlayer"
-import { Loader2, Wallet, CheckCircle, LogOut, UserPlus } from "lucide-react"
-import { useEffect } from "react"
+import { Button } from "./ui/button";
+import { useStarknetConnect } from "../dojo/hooks/useStarknetConnect";
+import { useSpawnPlayer } from "../dojo/hooks/useSpawnPlayer";
+import { usePlayer } from "../dojo/hooks/usePlayer";
+import { useAccount } from "@starknet-react/core"
+import { Loader2, Wallet, CheckCircle, LogOut, UserPlus, ExternalLink } from "lucide-react"
+import { useCallback, useEffect } from "react"
 
 export function StatusBar() {
   const {
@@ -22,6 +23,9 @@ export function StatusBar() {
     txHash
   } = useSpawnPlayer();
 
+  //Hook to access the connector
+  const { connector } = useAccount();
+
   const isConnected = status === "connected";
   const isLoading = isConnecting || status === "connecting" || isInitializing || playerLoading;
 
@@ -29,7 +33,6 @@ export function StatusBar() {
   useEffect(() => {
     if (isConnected && !player && !isInitializing && !playerLoading) {
       console.log("🎮 Wallet connected but no player found, auto-initializing...");
-      // Small delay to make it feel natural
       setTimeout(() => {
         initializePlayer().then(result => {
           console.log("🎮 Auto-initialization result:", result);
@@ -62,6 +65,19 @@ export function StatusBar() {
     return { color: "bg-yellow-500", text: "Loading..." };
   };
 
+  // function to open the Controller Profile 
+  const handlePlayerReady = useCallback(() => {
+    if (!connector || !('controller' in connector)) {
+      console.error("Connector not initialized");
+      return;
+    }
+    if (connector.controller && typeof connector.controller === 'object' && 'openProfile' in connector.controller) {
+      (connector.controller as { openProfile: (profile: string) => void }).openProfile("achievements");
+    } else {
+      console.error("Connector controller is not properly initialized");
+    }
+  }, [connector]);
+
   const playerStatus = getPlayerStatus();
 
   return (
@@ -89,11 +105,13 @@ export function StatusBar() {
           ) : (
             <div className="flex items-center gap-3">
               <Button
-                className={`px-6 py-3 font-semibold transition-all duration-300 shadow-lg cursor-default ${player
-                  ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-green-500/30"
-                  : "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 shadow-yellow-500/30"
-                  }`}
-                disabled
+                onClick={player ? handlePlayerReady : undefined}
+                className={`px-6 py-3 font-semibold transition-all duration-300 shadow-lg ${
+                  player 
+                    ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-green-500/40 cursor-pointer hover:scale-105 active:scale-95"
+                    : "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 shadow-yellow-500/30 cursor-default"
+                }`}
+                disabled={!player}
               >
                 {isInitializing ? (
                   <>
@@ -121,7 +139,7 @@ export function StatusBar() {
               <Button
                 onClick={handleDisconnect}
                 variant="outline"
-                className="px-4 py-3 border-white/20 hover:border-white/40 hover:bg-white/10 text-white hover:text-white"
+                className="px-4 py-3 border-red-400/40 hover:border-red-400/60 hover:bg-red-500/10 text-red-400 hover:text-red-300 transition-all duration-300"
                 disabled={isInitializing}
               >
                 <LogOut className="w-4 h-4" />
@@ -151,22 +169,31 @@ export function StatusBar() {
 
       {/* Transaction Hash Display */}
       {txHash && (
-        <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-          <div className="text-blue-400 text-sm">
-            <span className="font-semibold">Player Creation Tx: </span>
-            <a
-              href={`https://sepolia.starkscan.co/tx/${txHash}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-blue-300"
-            >
-              {formatAddress(txHash)}
-            </a>
-            <span className="ml-2">
-              {txStatus === 'PENDING' && '⏳'}
-              {txStatus === 'SUCCESS' && '✅'}
-              {txStatus === 'REJECTED' && '❌'}
-            </span>
+        <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+          <div className="text-blue-400 text-sm space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Player Creation Transaction:</span>
+              <span className="ml-2">
+                {txStatus === 'PENDING' && '⏳ Processing'}
+                {txStatus === 'SUCCESS' && '✅ Confirmed'}
+                {txStatus === 'REJECTED' && '❌ Failed'}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs bg-blue-900/30 px-2 py-1 rounded">
+                {formatAddress(txHash)}
+              </span>
+
+              <a
+                href={`https://sepolia.starkscan.co/tx/${txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-blue-300 hover:text-blue-200 transition-colors"
+              >
+                <ExternalLink className="w-3 h-3" />
+                View on StarkScan
+              </a>
+            </div>
           </div>
         </div>
       )}

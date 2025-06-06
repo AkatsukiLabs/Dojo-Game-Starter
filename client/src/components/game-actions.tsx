@@ -1,13 +1,13 @@
-import { Button } from "./ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
-import { Dumbbell, Hammer, Bed, Loader2 } from "lucide-react"
-import { useTrainAction } from "../dojo/hooks/useTrainAction"
-import { useMineAction } from "../dojo/hooks/useMineAction"
-import { useRestAction } from "../dojo/hooks/useRestAction"
-import useAppStore from "../zustand/store"
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Dumbbell, Hammer, Bed, Loader2, ExternalLink } from "lucide-react";
+import { useTrainAction } from "../dojo/hooks/useTrainAction";
+import { useMineAction } from "../dojo/hooks/useMineAction";
+import { useRestAction } from "../dojo/hooks/useRestAction";
+import useAppStore from "../zustand/store";
 
 export function GameActions() {
-  const player = useAppStore(state => state.player);
+  const player = useAppStore((state) => state.player);
 
   // Separate hooks for each action
   const { trainState, executeTrain, canTrain } = useTrainAction();
@@ -32,7 +32,10 @@ export function GameActions() {
       color: "from-yellow-500 to-yellow-600",
       state: mineState,
       canExecute: canMine,
-      disabledReason: !canMine && player && (player.health || 0) <= 5 ? "Low Health!" : undefined,
+      disabledReason:
+        !canMine && player && (player.health || 0) <= 5
+          ? "Low Health!"
+          : undefined,
     },
     {
       icon: Bed,
@@ -42,14 +45,24 @@ export function GameActions() {
       color: "from-green-500 to-green-600",
       state: restState,
       canExecute: canRest,
-      disabledReason: !canRest && player && (player.health || 0) >= 100 ? "Full Health!" : undefined,
+      disabledReason:
+        !canRest && player && (player.health || 0) >= 100
+          ? "Full Health!"
+          : undefined,
     },
   ];
+
+  const formatAddress = (addr: string) => {
+    if (!addr) return "";
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
 
   return (
     <Card className="bg-white/5 backdrop-blur-xl border-white/10">
       <CardHeader>
-        <CardTitle className="text-red-400 text-xl font-bold">Game Actions</CardTitle>
+        <CardTitle className="text-white text-xl font-bold">
+          Game Actions
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {!player && (
@@ -63,7 +76,7 @@ export function GameActions() {
         {actions.map((action) => {
           const Icon = action.icon;
           const isLoading = action.state.isLoading;
-          const hasError = action.state.error;
+          const hasError = Boolean(action.state.error);
 
           return (
             <div key={action.label} className="space-y-2">
@@ -79,7 +92,9 @@ export function GameActions() {
                 )}
                 <div className="flex flex-col items-start flex-1">
                   <span className="font-semibold">{action.label}</span>
-                  <span className="text-xs opacity-80">{action.description}</span>
+                  <span className="text-xs opacity-80">
+                    {action.description}
+                  </span>
                 </div>
                 {action.disabledReason && (
                   <span className="text-xs opacity-60">
@@ -90,18 +105,59 @@ export function GameActions() {
 
               {/* Individual transaction state */}
               {(action.state.txStatus || hasError) && (
-                <div className={`p-2 rounded-lg border text-xs ${hasError
-                    ? "bg-red-500/10 border-red-500/30 text-red-400"
-                    : action.state.txStatus === 'SUCCESS'
-                      ? "bg-green-500/10 border-green-500/30 text-green-400"
-                      : "bg-yellow-500/10 border-yellow-500/30 text-yellow-400"
-                  }`}>
+                <div
+                  className={`p-3 rounded-lg border text-sm ${hasError
+                      ? "bg-red-500/10 border-red-500/30 text-red-400"
+                      : action.state.txStatus === "SUCCESS"
+                        ? "bg-green-500/10 border-green-500/30 text-green-400"
+                        : "bg-yellow-500/10 border-yellow-500/30 text-yellow-400"
+                    }`}
+                >
                   {hasError ? (
-                    `Error: ${action.state.error}`
-                  ) : action.state.txStatus === 'SUCCESS' ? (
-                    `✅ ${action.label} completed!`
+                    `❌ Error: ${action.state.error}`
+                  ) : action.state.txStatus === "SUCCESS" ? (
+                    <div className="space-y-2">
+                      <div>✅ {action.label} completed successfully!</div>
+                      {action.state.txHash && (
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="font-mono bg-black/20 px-2 py-1 rounded">
+                            {formatAddress(action.state.txHash)}
+                          </span>
+                          <a
+                            href={`https://sepolia.starkscan.co/tx/${action.state.txHash}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 hover:underline"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            StarkScan
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   ) : (
-                    `⏳ ${action.label} processing...`
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                        ⏳ {action.label} processing...
+                      </div>
+                      {action.state.txHash && (
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="font-mono bg-black/20 px-2 py-1 rounded">
+                            {formatAddress(action.state.txHash)}
+                          </span>
+                          <a
+                            href={`https://sepolia.starkscan.co/tx/${action.state.txHash}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 hover:underline"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            View Live
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
               )}
