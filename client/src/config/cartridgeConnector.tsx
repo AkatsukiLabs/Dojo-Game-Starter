@@ -36,7 +36,7 @@ const options: ControllerOptions = {
   theme,
   colorMode,
   namespace: "full_starter_react", 
-  slot: "full_starter_react", 
+  slot: "full-starter-react", 
 };
 
 const cartridgeConnector = new ControllerConnector(
