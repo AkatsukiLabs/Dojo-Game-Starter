@@ -11,7 +11,6 @@ export default function HomePage() {
         <StatusBar />
         <GameSection />
         <LinksSection />
-        {/* <AchievementPopup /> */} {/* Comentar hasta implementar con blockchain */}
       </div>
     </div>
   )
