@@ -1,6 +1,6 @@
 # 🎮 Dojo Game Starter
 
-> **The fastest way to build onchain games on Starknet**  
+> **The fastest way to build onchain games on Starknet**
 > From zero to deployed in 5 minutes ⚡
 
 <div align="center">
@@ -46,7 +46,7 @@ dojo-game-starter/
 │   │   └── hooks/                # Custom React hooks for blockchain
 │   ├── docs/                     # 📚 Complete integration documentation
 │   └── README.md                 # Frontend-specific documentation
-├── ⚙️ contracts/                 # Cairo smart contracts
+├── ⚙️ contract/                 # Cairo smart contracts
 │   ├── src/
 │   │   ├── models/               # Data entities (Player model)
 │   │   ├── systems/              # Game logic (train, mine, rest)
@@ -74,9 +74,9 @@ The `client/` directory contains a complete React + Dojo integration with compre
 - **[08. Extending the System](./client/docs/08-extending-system.md)** - Building your game
 
 ### **⚙️ Backend Development**
-The `contracts/` directory contains Cairo smart contracts with Dojo Engine:
+The `contract/` directory contains Cairo smart contracts with Dojo Engine:
 
-📖 **[Contracts Documentation](./contracts/README.md)** - Backend development guide
+📖 **[Contracts Documentation](./contract/README.md)** - Backend development guide
 
 **Key Topics Covered:**
 - **Project Structure** - Models, Systems, Store architecture
@@ -131,15 +131,15 @@ The starter demonstrates essential onchain game patterns:
 ## 🌟 Getting Started
 
 1. **For Frontend Development:** Start with [Client README](./client/README.md)
-2. **For Backend Development:** Check [Contracts README](./contracts/README.md)
+2. **For Backend Development:** Check [Contracts README](./contract/README.md)
 3. **For Complete Understanding:** Follow the [Integration Guide Series](./client/docs/)
 
 ## 🔗 Links
 
-- **[Starknet](https://starknet.io)** 
-- **[Dojo Engine](https://dojoengine.org)** 
-- **[Cairo](https://cairo-lang.org)** 
-- **[Cartridge](https://cartridge.gg)** 
+- **[Starknet](https://starknet.io)**
+- **[Dojo Engine](https://dojoengine.org)**
+- **[Cairo](https://cairo-lang.org)**
+- **[Cartridge](https://cartridge.gg)**
 
 ---
 
