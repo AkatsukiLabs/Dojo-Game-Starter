@@ -12,14 +12,15 @@ node_modules
 dist
 dist-ssr
 dev-dist
+.pnpm-store
 
 # Environment and local settings
 *.local
 .env
 
 # mkcert certificates
-mkcert+1.pem
-mkcert+1-key.pem
+dev-key.pem
+dev.pem
 localhost*.pem
 localhost*-key.pem
 

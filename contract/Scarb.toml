@@ -17,8 +17,8 @@ achievement = { git = "https://github.com/cartridge-gg/arcade", tag = "v1.2.1" }
 [[target.starknet-contract]]
 build-external-contracts = [
     "dojo::world::world_contract::world",
-    "achievement::events::index::e_TrophyCreation", 
-    "achievement::events::index::e_TrophyProgression", 
+    "achievement::events::index::e_TrophyCreation",
+    "achievement::events::index::e_TrophyProgression",
 ]
 
 [dev-dependencies]

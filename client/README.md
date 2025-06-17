@@ -1,16 +1,18 @@
 # 🎮 Dojo Game Starter - Frontend Integration Guide
 
-> **Complete React + Dojo integration documentation**  
+> **Complete React + Dojo integration documentation**
 > From zero to onchain game in 5 minutes ⚡
 
 [![Starknet](https://img.shields.io/badge/Starknet-Ready-orange)](https://starknet.io) [![Cairo](https://img.shields.io/badge/Cairo-2.0-blue)](https://cairo-lang.org) [![Dojo](https://img.shields.io/badge/Dojo-ECS-red)](https://dojoengine.org)
 
 ## 🚀 Quick Start
 
+> Controller requires the client to run over HTTPS, so make sure you have the `mkcert` package installed on your system
+
 ```bash
 git clone https://github.com/your-username/dojo-game-starter
 cd dojo-game-starter/client
-npm install && npm run dev
+npm install && npm run mkcert && npm run dev
 ```
 
 **That's it!** Your onchain game is running locally with wallet integration, optimistic updates, and seamless blockchain connectivity.

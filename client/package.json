@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "serve": "vite preview",
     "format:check": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "mkcert": "mkcert -key-file dev-key.pem -cert-file dev.pem localhost"
   },
   "dependencies": {
     "@cartridge/connector": "0.5.9",
