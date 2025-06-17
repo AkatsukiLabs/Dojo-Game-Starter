@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:https": "VITE_LOCAL_HTTPS=true vite",
+    "dev:http": "VITE_LOCAL_HTTPS=false vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "preview:https": "VITE_LOCAL_HTTPS=true vite preview",
     "serve": "vite preview",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "mkcert": "mkcert -key-file dev-key.pem -cert-file dev.pem localhost"
+    "mkcert": "mkcert -key-file dev-key.pem -cert-file dev.pem localhost 127.0.0.1 ::1"
   },
   "dependencies": {
     "@cartridge/connector": "0.5.9",

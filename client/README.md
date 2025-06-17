@@ -12,7 +12,7 @@
 ```bash
 git clone https://github.com/your-username/dojo-game-starter
 cd dojo-game-starter/client
-npm install && npm run mkcert && npm run dev
+npm install && npm run mkcert && npm run dev:https
 ```
 
 **That's it!** Your onchain game is running locally with wallet integration, optimistic updates, and seamless blockchain connectivity.
