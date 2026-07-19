@@ -13,6 +13,7 @@ pub enum Achievement {
     LegendGamer,
     AllStarGamer,
     SenseiGamer,
+    MarcoTesting
 }
 
 #[generate_trait]
