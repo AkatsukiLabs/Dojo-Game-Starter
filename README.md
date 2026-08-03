@@ -1,6 +1,6 @@
 # 🎮 Dojo Game Starter - testing marco
 # 🎮 Dojo Game Starter - coxmars working
-
+# TESTING STRK 
 > **The fastest way to build onchain games on Starknet**
 > From zero to deployed in 5 minutes ⚡
 
